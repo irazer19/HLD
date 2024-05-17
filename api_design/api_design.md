@@ -61,4 +61,25 @@ WebSocket is a protocol that allows web applications to communicate bidirectiona
 A WebSocket establishes an HTTP connection and then upgrades it to the WebSocket protocol. All the transmission happens directly on the TCP channel. 
 The URLs for connections using WebSocket begin with ws:// and wss:// for non-TLS and TLS-based connections, respectively. <br/>
 
+Data exchange format for an API depends on the need.
+Example:
+1. Text based format: JSON is probably the ideal choice when dealing with small groups of systems, especially those developed in JavaScript, where human-readability is essential.
+2. Binary data format: Protobuf or Thrift may serve the purpose when network latency, interprocess communication, and processing speed are paramount.
+
+#### Various API Architecture Style:
+1. REST
+2. RPC
+3. GraphQL
+
+#### REST API best practices:
+1. Avoid using verbs and use nouns in the endpoint, Ex: Instead of /getUser, use /user
+2. Use standard HTTP error codes regularly when an error occurs.
+3. Use Filtering and pagination.
+4. Implement security practices
+5. API versioning
+6. API documentation
+
+
+
+
 
