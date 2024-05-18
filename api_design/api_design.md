@@ -161,3 +161,60 @@ The gRPC framework provides more control over the HTTP protocol, allowing it to 
 #### When to avoid gRPC?
 1. If the developer's or consumer’s language is not supported by the framework.
 2. In applications if they are calling a limited number of back-end services, it's best to use REST for ease.
+
+### API Security:
+To guarantee that a certain security goal is met, we apply the following mechanisms:
+1. Encryption
+2. Validation
+3. Authentication
+4. Authorization
+
+Transport layer security (TLS) is a cryptographic protocol that permits safe transmission between the client and API provider. TLS ensures message authentication, encryption, and data integrity. <br/>
+#### Steps in TLS handshake:
+1. Client Hello: The client initiates the handshake by sending a "Client Hello" message to the server. This message includes the client's supported TLS version, cipher suites, compression methods, and a random string called the "client random".
+2. Server Hello: The server responds with a "Server Hello" message. This message contains the server's chosen TLS version, cipher suite, compression method, and a random string called the "server random". The server also sends its digital certificate to the client for authentication.
+3. Server Authentication and Key Exchange: The server sends its digital certificate to the client, which includes the server's public key. The server then sends a "Server Hello Done" message to indicate it has finished its part of the handshake.
+4. Client Authentication and Premaster Secret: The client verifies the server's certificate with a trusted Certificate Authority (CA). If the server requests client authentication, the client sends its certificate. The client then generates a premaster secret, encrypts it with the server's public key, and sends it to the server in a "Client Key Exchange" message.
+5. Decryption and Master Secret Generation: The server decrypts the premaster secret using its private key. Both the client and server then use the premaster secret, along with the client random and server random, to generate the master secret. This master secret is used to create session keys for encryption and decryption.
+6. Change Cipher Spec and Finished Messages: The client sends a "Change Cipher Spec" message to inform the server that it will start using the newly negotiated encryption keys. The client then sends a "Finished" message, encrypted with the session key, indicating that the client part of the handshake is complete.
+7. The server responds with its own "Change Cipher Spec" message and a "Finished" message, also encrypted with the session key, indicating that the server part of the handshake is complete.
+8. Secure Communication: After the handshake is complete, the client and server use the session keys to encrypt and decrypt the data they exchange, ensuring secure communication.
+
+How does the client know that the server it’s talking to is exactly the one the client intended? <br/>
+Through the use of digital certificates, the client and server are identified. <br/>
+How do we achieve confidentiality/secrecy of the messages? <br/>
+Confidentiality is achieved with the encryption protocols implemented because even if an attacker intercepts a transmission, they won't be able to comprehend or decrypt the ciphertext. <br/>
+
+#### Input validations:
+1. Client side validation: Mostly at the browser side.
+2. Server side validation: Has multiple checks and data sanity test.
+
+#### Cross-Origin Resource Sharing (CORS):
+Suppose that John is lured into visiting www.evil-site.com. This site responds with JavaScript code that then makes a call to www.facebook.com, where 
+John logs in without any hesitation. As a consequence, the JavaScript code downloaded from www.evil-site.com obtains access to the DOM elements of 
+www.facebook.com and, and to John's sensitive data. <br/>
+
+The example that we saw above demonstrates an unrestricted interaction between two web pages belonging to different origins, which could lead to a potential data breach. 
+An origin is defined as a combination of scheme (protocol), hostname, and port number. <br/>
+To solve the above problem, Same-origin-policy (SOP) was created, which only allows access to resources which are coming from the same origin. 
+But it's too restrictive for many apps that want to access resource from different origin, so CORS was made. <br/>
+
+CORS allows two types of cross-origin requests: <br/>
+Simple: The process begins with a cross-origin request initiated by http://abc.com for data stored in the http://xyz.com server. 
+In this example, while http://abc.com is a web service, in our context, it will act as a client. The request contains the client's Origin. 
+A response is then sent from the server to the browser. The server adds an Access-Control-Allow-Origin header to the response. 
+The browser then compares the Origin in the client's request with Access-Control-Allow-Origin in the server's response. If they are identical, the cross-origin request is permitted. <br/>
+
+Preflighted: A preflight request is a mechanism used in Cross-Origin Resource Sharing (CORS) to ensure the safety and permission of complex HTTP 
+requests before they are sent to the server. A preflight request is an HTTP OPTIONS request sent by the browser to the server before the actual request. It checks if the server permits 
+the actual request based on the specified HTTP method and headers. <br/>
+
+Authentication in preflight requests:
+To enable this, we must manually specify the flag withCredentials = true for the request. 
+The Access-Control-Allow-Credentials header in the server's response must also be set as true. <br/>
+
+
+
+
+
+
