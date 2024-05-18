@@ -47,7 +47,7 @@ Steps in RPC:
 4. Execution and Return: The procedure executes on the server, and the results are sent back to the client in a similar manner13.
 
 Example: 
-In gRPC .proto is a file that defines the structure of the data and the services used in gRPC communication. 
+In gRPC .proto is a file that defines the structure of the data and the services used in gRPC communication.
 It uses Protocol Buffers (protobuf), which is a language-neutral, platform-neutral, extensible mechanism for serializing structured data.
 It is used to generate the necessary client and server code, enabling efficient and structured remote procedure calls.<br/>
 
@@ -127,3 +127,37 @@ query{
 }
 ```
 
+### gRPC:
+gRPC is an RPC framework that achieves high performance by leveraging the multiplexing functionality to create logical subchannels to support the following types of connections:
+1. Request-response: The client can send a single request, and the server can reply with a single response.
+2. Client streaming: The client can send multiple requests, and the server can reply with a single response.
+3. Server streaming: The client can send a single request, and the server can reply with multiple responses.
+4. Bidirectional streaming: The client can send multiple requests, and the server can reply with multiple responses.
+
+In gRPC, Protobuf is the default interface definition language (IDL). <br/>
+gRPC Channel vs Subchannel: A channel is the actual TCP connection created between a gRPC client and a gRPC server. A subchannel is the logical management of HTTP/2 streams inside this channel. <br/>
+Every response returned by the server ends with trailing metadata, which is important for load balancers because it carries information about the availability and load on the server. <br/>
+The gRPC framework provides more control over the HTTP protocol, allowing it to adjust data transfer rates based on client capabilities, which is why it can be considered a better choice when dealing with resource-constrained devices. <br/>
+
+#### When to use REST API?
+1. When CRUD operation is needed.
+2. Stateless behavior in the request & response.
+
+#### When to avoid REST API?
+1. When there is a need for event-driven architecture.
+2. Complex query requirements.
+
+#### When to use GraphQL?
+1. When there is a client application gathering data from multiple data sources. GraphQL aggregates data from multiple data sources and sends a consolidated response to the client.
+2. When applications can ask for the specific fields they want to present to the user instead of requesting all the fields.
+
+#### When to avoid GraphQL?
+1. GraphQL is not the right option for server-to-server communication. For example, if we want to build a way for some back-end services to speak to each other, GraphQL might not be a good choice here
+
+#### When to use gRPC?
+1. If we have to design a low-latency, highly scalable distributed system, we should consider gRPC.
+2. If we aim to build a back-end system including an enormous number of interconnected microservices. In such a case, gRPC can provide efficiency and speed.
+
+#### When to avoid gRPC?
+1. If the developer's or consumer’s language is not supported by the framework.
+2. In applications if they are calling a limited number of back-end services, it's best to use REST for ease.
