@@ -79,7 +79,51 @@ Example:
 5. API versioning
 6. API documentation
 
+#### GraphQL vs REST API:
+Problems with REST API:
+1. Clients often need to make multiple round-trips to different endpoints to gather all the required data. This can lead to over-fetching, where clients receive more data than needed, wasting network and memory resources.
+2. Clients have limited control over the data returned by the server. They cannot specify which fields to retrieve, leading to either over-fetching or under-fetching of data.
 
+Solution using GraphQL:
+1. Allows clients to request exactly the data they need in a single query, reducing the number of round-trips and preventing over-fetching.
+2. Clients can specify exactly which fields they need, providing more flexibility and efficiency in data fetching.
 
+GraphQL is sometimes confused with the database, but it’s actually a query language for APIs. <br/>
+The implementation of GraphQL can be divided into two components: 
+1. GraphQL server
+2. GraphQL client: Actual front-end component that allows us to accept queries, connect to the GraphQL endpoint, and issue queries to gather data
 
+GraphQL server contains: 
+1. Schema: A schema is a model of the data and defines relationships between the data. Based on the schema, the server specifies what types of queries and data a client can request. 
+2. Resolve functions: A schema can tell us what types of data a client can request but lacks information about where the data comes from. Here, the resolve functions specify how types and fields in the schema are connected to various backends.
+
+GraphQL mutations: We can think of GraphQL mutations as the equivalent of POST, PUT, PATCH, and DELETE methods used by REST. <br/>
+Example: 
+1. Insert mutations: These are used to insert a new record on the server side.
+2. Update mutations: These are used to modify an existing record in the database.
+3. Delete mutations: These are used to delete a specific record from the database.
+
+#### GraphQL request format:
+```text
+query{
+    starship(starshipID:10) {
+       name
+       length
+  	   cargoCapacity
+       }
+}
+```
+
+#### GraphQL response format:
+```text
+{
+  "data": {
+     "starship": {
+        "name": "Millennium Falcon",
+        "length": 34.37,
+        "cargoCapacity": 100000
+    }
+  }
+}
+```
 
