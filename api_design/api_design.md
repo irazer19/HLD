@@ -213,6 +213,46 @@ Authentication in preflight requests:
 To enable this, we must manually specify the flag withCredentials = true for the request. 
 The Access-Control-Allow-Credentials header in the server's response must also be set as true. <br/>
 
+### Authentication & Authorization:
+1. Authentication refers to the procedure through which our API verifies who the user is.
+2. Authorization is controlling what the user has access to.
+
+#### HTTP basic authentication:
+HTTP basic authentication is a rudimentary scheme that verifies a client through username and password authentication. 
+It encodes the user's username and password in Base64 and embeds it into its Authorization header. <br/>
+
+#### API keys:
+API keys deal with the shortcomings of HTTP basic authentication by replacing the encoded username and password with a generated string.
+With API key authentication, the application forwards its assigned API key in the header of its request. When the server receives the said request, 
+it looks up the API key in its database in hopes of verifying the application. Because the API is separate from the user’s username and password, any security breach will be limited to the API. <br/>
+Disadvantage: Need another authorization protocol alongside them, or else attackers can gain access to API keys and subsequent permissions. <br/>
+
+#### JSON Web Token (JWT):
+A JSON Web Token (JWT) is an open standard that’s a compact and self-sufficient method for safely transferring data between entities in the form of JSON objects. 
+JWTs are a collection of encrypted strings denoting a header, a payload, and a signature that travel through HTTP requests. Unlike the previous protocols, 
+tokens can be used for both authentication and authorization purposes because they carry information about the token's holder. <br/>
+
+JSON Web Tokens (JWTs) are composed of three main parts:
+1. Header: The header typically consists of two parts: Type of the token: This is usually "JWT". Signing algorithm: This specifies the algorithm used to sign the token, such as HMAC SHA256 or RSA.
+2. Payload: The payload contains the claims, which are statements about an entity (typically, the user) and additional metadata.
+3. Signature: The signature is used to verify the token's integrity and authenticity. It is created by taking the encoded header, the encoded payload, a secret, and the algorithm specified in the header, and then signing them.
+
+A complete JWT looks like this: xxxxx.yyyyy.zzzzz, where xxxxx is the Base64Url encoded header, yyyyy is the Base64Url encoded payload, and zzzzz is the signature. <br/>
+
+#### API keys and tokens may seem similar, but there are a few key differences:
+1. API keys only serve to identify the client, whereas tokens carry more information with them, such as their source, the identifier, and other metadata. This extra information is helpful for authorization purposes.
+2. Tokens are structured to contain a header and a payload. API keys are just generated strings.
+
+#### Steps using jwt:
+1. The user provides their credentials (e.g., username and password) to the authentication server.
+2. The server checks the credentials. If they are correct, the server generates a JWT.
+3. The server sends the JWT to the client (e.g., web browser). The client stores the JWT, typically in local storage or a cookie.
+4. For subsequent requests to protected resources, the client includes the JWT in the HTTP Authorization header using the Bearer schema: Authorization: Bearer <token>.
+5. The server verifies the JWT by checking the signature and ensuring the token has not expired and is valid.
+6. Server grants or denies access based on the JWT's validity.
+
+
+
 
 
 
