@@ -251,6 +251,40 @@ A complete JWT looks like this: xxxxx.yyyyy.zzzzz, where xxxxx is the Base64Url 
 5. The server verifies the JWT by checking the signature and ensuring the token has not expired and is valid.
 6. Server grants or denies access based on the JWT's validity.
 
+### OAUTH 2.0:
+OAuth 2.0 is an open-standard authorization framework that allows third-party applications to gain limited access to a user's resources on another service without exposing the user's credentials. <br/>
+Four entities in OAuth communicate to achieve secure transmission of resources:
+1. End user: This is the application user that owns the resources (like user credentials).
+2. Resource server: This server holds the resources of the end user (the Google server holding the user's protected information in the example above).
+3. Application/client: The application or client requests the user's resources from the resource server (Spotify application).
+4. Authorization server: This server provides authorization to the application/client for accessing the resources (the Google authorization service).
+
+#### Steps using Google:
+1. Authorization Request: The client requests authorization from the Google by entering credentials.
+2. Authorization Grant: Google grants authorization code/grant, usually through an authorization server.
+3. Access Token Request: The client requests an access token from the authorization server using the authorization grant/code.
+4. Access Token Issuance: The authorization server issues an access token to the client.
+5. Resource Access: The client uses the access token to request the users protected resources from Google.
+6. Resource Server Response: The resource server validates the access token and provides the requested resources to the client.
+
+The authorization grant/code is shared in the url query parameter: ?code=hghsgfdhsvnsndjshdsb which is readable, that's why the access token is not directly shared but exchanged in the next step. <br/>
+Because the authorization grant/code can be accessed by an attacker, there is an extension of OAuth using Proof Key for Code Exchange (PKCE). <br/>
+Steps of OAuth using PKCE:
+1. The client application generates a random string called the code_verifier. This string is used only once and is unique for each authorization request.
+2. The code_verifier is transformed into a code_challenge using SHA-256, etc.
+3. The client authorization request includes the code_challenge and the code_challenge_method.
+4. The authorization server then redirects the user back to the client with an authorization code.
+5. The client sends a request to the authorization server to exchange the authorization code for an access token. This request includes the authorization code and the original code_verifier.
+6. The authorization server verifies the code_verifier by transforming it using the same method specified in the initial request and comparing it to the stored code_challenge. If they match, the server issues an access token.
+
+This way the attacker will have authorization code but not the code_verifier for exchanging with the access_token. <br/>
+
+#### OpenID Connect (OIDC):
+The process is same as OAuth 2.0, but here along with access token, we also get JWT token which contains user info for verifying the users identity.
+And this JWT token can be used to access multiple apps which is also known as SSO.
+
+
+
 
 
 
