@@ -370,8 +370,7 @@ same request, then the server state remains the same after the first call. <br/>
 1. POST
 2. PATCH
 
-We convert the non-idempotent methods to idempotent by using Idempotence-key:
-#### Steps:
+#### We convert the non-idempotent methods to idempotent by using Idempotence-key:
 1. The client generates a unique idempotent key.
 2. The client includes the idempotent key in the request as an HTTP header: Idempotent-Key: 123e4567-e89b-12d3-a456-426614174000.
 3. The server checks if the idempotent key has been used before, if yes then it returns the cached response, else processes the request and saves the idempotent-key.
