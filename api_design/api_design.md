@@ -375,6 +375,29 @@ same request, then the server state remains the same after the first call. <br/>
 2. The client includes the idempotent key in the request as an HTTP header: Idempotent-Key: 123e4567-e89b-12d3-a456-426614174000.
 3. The server checks if the idempotent key has been used before, if yes then it returns the cached response, else processes the request and saves the idempotent-key.
 
+### Circuit-breaker pattern:
+The Circuit Breaker pattern is a design pattern used in software development to enhance the fault tolerance and resilience of applications, 
+particularly in distributed systems and microservices architectures. It is designed to detect failures and prevent an application from repeatedly 
+attempting an operation that is likely to fail, thereby avoiding cascading failures and maintaining system stability. <br/>
+
+### The Circuit Breaker pattern typically operates in three main states:
+1. Closed State:
+    1. The circuit breaker operates normally, allowing requests to pass through to the services.
+    2. It monitors the health of the downstream service by collecting metrics such as response times, error rates, or timeouts.
+    3. If the number of failures exceeds a predefined threshold, the circuit breaker transitions to the Open state.
+2. Open State:
+   1. The circuit breaker immediately stops forwarding requests to the failing service and returns an error or a predefined fallback response to the caller.
+   2. This state helps prevent further strain on the failing service and avoids cascading failures.
+   3. After a specified timeout period, the circuit breaker transitions to the Half-Open state to test if the service has recovered.
+3. Half-Open State:
+   1. The circuit breaker allows a limited number of trial requests to pass through to the downstream service.
+   2. If the trial requests succeed, indicating that the service has recovered, the circuit breaker transitions back to the Closed state.
+   3. If the trial requests fail, the circuit breaker transitions back to the Open state or remains in the Half-Open state for further evaluation
+
+#### Strategies for Managing Client Retries:
+1. Implementing Idempotent Operations
+2. Using Exponential Backoff
+3. Circuit Breaker Pattern
 
 
 
