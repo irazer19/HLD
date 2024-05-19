@@ -283,6 +283,41 @@ This way the attacker will have authorization code but not the code_verifier for
 The process is same as OAuth 2.0, but here along with access token, we also get JWT token which contains user info for verifying the users identity.
 And this JWT token can be used to access multiple apps which is also known as SSO.
 
+#### When to add a new version to an API?
+1. When the current changes are breaking the API for existing users.
+2. New features which cannot work with the current api causing confusion/conflict.
+
+#### Different ways to add versions to an API:
+1. URL routing: GET /api/v1/resource and GET /api/v2/resource
+2. HTTP header: api-version: 2
+3. Using hostnames: Older: api.example.com & newer: graph.example.com
+
+#### Client Adapting API's:
+Since desktops and mobile devices have different screen space, therefore the amount of data required is different.
+The mobile version requires much less data because of its smaller screen size, but since we have a common API, the mobile and desktop receive same amount of data. <br/>
+We can handle API flexibility in two ways:
+1. Client side: Where the client filters the data after getting it from the server.
+2. Server side: Where the server returns the data based on the client type.
+
+#### Data fetching patterns in API:
+1. Short polling
+2. Long polling
+3. Websockets
+
+### Event-Driven Architecture protocols:
+Event-driven architecture (EDA) protocols are essential for enabling microservices and other components to communicate through events. Here are the different protocols used in event-driven architectures:
+
+### 1. WebSockets
+WebSockets provide a full-duplex communication channel over a single, long-lived connection. This protocol is ideal for real-time applications where low latency is crucial, such as live chat applications or real-time data feeds[1].
+
+### 2. WebHooks
+WebHooks are user-defined HTTP callbacks that are triggered by specific events. When an event occurs, the source site makes an HTTP request to the URL configured for the WebHook. This is commonly used for integrating different services and automating workflows[1].
+
+### 4. Pub-Sub (Publish-Subscribe)
+The Publish-Subscribe model involves publishers sending messages to a topic, and subscribers receiving messages from that topic. This decouples the producers and consumers of messages, enhancing scalability and flexibility. Common implementations include message brokers like Apache Kafka, RabbitMQ, and NATS[1][3][4].
+
+### 5. Server-Sent Events (SSE)
+Server-Sent Events (SSE) allow servers to push updates to clients over a single HTTP connection. This protocol is useful for applications that require real-time updates, such as live sports scores or stock price updates[1].
 
 
 
