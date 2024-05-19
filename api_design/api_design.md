@@ -319,6 +319,63 @@ The Publish-Subscribe model involves publishers sending messages to a topic, and
 ### 5. Server-Sent Events (SSE)
 Server-Sent Events (SSE) allow servers to push updates to clients over a single HTTP connection. This protocol is useful for applications that require real-time updates, such as live sports scores or stock price updates[1].
 
+### Cookies:
+A cookie is a small text file stored on the user's computer by their web browser. It is used to store information that can be sent back to the server with each subsequent request from the browser. <br/>
+Cookies store their information in a text file and are not secure by default.
+#### Types:
+1. Session Cookies: These are temporary and are deleted once the user closes the browser. They are used to store information about a user's session on a website, such as login status or items in a shopping cart.
+2. Persistent Cookies: These remain on the user's device for a specified period or until they are manually deleted. They are often used for tracking user behavior and preferences over time.
+
+#### Uses:
+1. Session Management: Keeping track of user sessions, such as login status and shopping cart contents.
+2. Personalization: Storing user preferences and settings to customize the user experience.
+3. Tracking: Monitoring user behavior across different websites for analytics and advertising purposes.
+
+### Sessions:
+Sessions are more secure than cookies because the data is stored on the server and can be encrypted. The session ID stored in the cookie is the only piece of information exposed to the client.
+Session objects are a data-structure like dictionary which store info about the user/user_activities. <br/>
+Once the user logs-out, the session can be cleared for that user, and also the client can delete the cookie related to that session.
+Ex: In flask framework:
+```python
+from flask import Flask, session, request, redirect, url_for
+
+app = Flask(__name__)
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        username = request.form['username']
+        password = request.form['password']
+        if username and password:  # If creds are correct
+            session['username'] = username
+            return redirect(url_for('home'))
+        return 'Invalid credentials <br> <a href="/login">Try again</a>'
+```
+
+### Idempotence in API:
+Idempotence is a concept where clients get the same response against multiple identical requests. Using idempotence, calling endpoints 
+any number of times results in the call occurring only once. This is an important concept because it ensures that if a client repeatedly sends the 
+same request, then the server state remains the same after the first call. <br/>
+
+#### Why does idempotence matter in API design?
+1. Reliability: The server will process the request correctly no matter how many times it is called.
+2. Consistency: The state of the data at the server side remains consistent.
+
+#### Some HTTP methods are by nature idempotent:
+1. GET: returns the same data always
+2. PUT: Updates the same row with same value always.
+3. DELETE: A row can only be deleted once.
+
+#### Methods that have to be converted to idempotent:
+1. POST
+2. PATCH
+
+We convert the non-idempotent methods to idempotent by using Idempotence-key:
+#### Steps:
+1. The client generates a unique idempotent key.
+2. The client includes the idempotent key in the request as an HTTP header: Idempotent-Key: 123e4567-e89b-12d3-a456-426614174000.
+3. The server checks if the idempotent key has been used before, if yes then it returns the cached response, else processes the request and saves the idempotent-key.
+
 
 
 
