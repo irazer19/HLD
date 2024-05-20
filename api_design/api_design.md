@@ -399,6 +399,21 @@ attempting an operation that is likely to fail, thereby avoiding cascading failu
 2. Using Exponential Backoff
 3. Circuit Breaker Pattern
 
+#### API response time can be broken into these segments:
+1. DNS lookup is the time to resolve the IP address against a domain name through the DNS server.
+2. TCP handshake is the time to establish an initial connection between the client and server.
+3. SSL/TLS handshake is the time to create a secure communication channel for data exchange.
+4. Transfer start is the time to acquire the first byte of the requested data in the response message. It includes both the round trip time of GET/POST messages and processing time at the server end.
+5. Download is the time taken by a client to fetch the complete data.
+
+Latency (also known as network latency) is the message propagation time between a client and a server. <br/>
+Processing time is the total time taken by the server to generate the response. <br/>
+Therefore, the total_response_time = Latency + Processing time <br/>
+
+
+
+
+
 
 
 
