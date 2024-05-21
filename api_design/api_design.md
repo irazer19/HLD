@@ -279,6 +279,18 @@ Steps of OAuth using PKCE:
 
 This way the attacker will have authorization code but not the code_verifier for exchanging with the access_token. <br/>
 
+### Auth0:
+If we don't want our app to handle authentication, then we can use Auth0.
+#### Steps to use Auth0:
+1. Create an app in the Auth0 website, and copy the client_id, client_secrets, etc.
+2. Now use a React Auth0 SDK to wrap the root page with the Auth0 provider component, also pass the client_id, secret of Auth0.
+3. Now when the user clicks on "Login" button, then react app will redirect it to the Auth0 login page (we can provide the html template to auth0) where the user enters the credentials.
+4. Next, the Auth0 will verify the credentials against its own user database or thirdparty service such as Google, Microsoft, etc.
+5. The auth0 will successfully redirect to the landing page with the authorization token in the query parameter.
+6. The React app will get this authorization token, and exchange it for an access token with the auth0 server.
+7. Now the React app will start making request to the Django backend by passing this access token(JWT).
+8. The Django server will verify this access token with the Auth0 server, and process the request.
+
 #### OpenID Connect (OIDC):
 The process is same as OAuth 2.0, but here along with access token, we also get JWT token which contains user info for verifying the users identity.
 And this JWT token can be used to access multiple apps which is also known as SSO.
