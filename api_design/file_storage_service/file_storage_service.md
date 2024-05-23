@@ -23,6 +23,8 @@
 3. User to file mapping system (UFMS): Maps users to files and where those files can be found in storage
 4. Temporary storage: Stores files and objects temporarily before processing
 
+![FileStorage Image](architechure.png)
+
 #### API protocol:
 We should use REST because it has better support for different operations in our file API and avoids unnecessary complexity. <br/>
 Therefore, we propose REST as a communication protocol from client to API gateway and from API gateway to downstream services. <br/>
@@ -120,6 +122,8 @@ The server may also respond with a link to download the file from a CDN:
 HTTP/1.1 302 Found
 Location: "cdn.provider.com/files/{fileId}"
 ```
+
+![Endpoints Image](endpoints.png)
 
 Most cloud storage services handle the upload/download of large files in chunks. The download/upload manager at client-end prepares the chunks and handles
 resumable downloads/uploads.

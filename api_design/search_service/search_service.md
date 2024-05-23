@@ -22,6 +22,8 @@
     1. Categorizes data after getting it from the application's database.
     2. Performs indexing of data and stores it in the index table.
 
+![SearchService Image](search_api_architecture.png)   
+
 #### Types of pagination:
 1. Skip and Limit: The client asks the server to skip some data and return only limited data, this leads the server to always skip x amount of data before returning. Ex: /search?query=courses&skip=10&limit=20
     1. Efficient for small datasets
@@ -89,6 +91,8 @@ Content-Type: application/json
          { "id": 2, "title": "value", "image" : "link" ...},
 }   
 ```
+
+![Endpoints Image](endpoints.png)
 
 ### Adding Filtering to the API:
 1. Simple Filter: In simple filtering, the search query filters results on the basis of a single entity. For example: search?query=Java&filter=Yes&Level=Intermediate, here we filter the query=Java by Level=Intermediate.

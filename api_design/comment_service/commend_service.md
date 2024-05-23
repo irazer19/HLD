@@ -25,6 +25,8 @@
     2. Cache stores frequently visited posts
     3. Blob storage keeps media files including images and videos
 
+![CommentService Image](img.png)
+
 ### Architecture styles:
 1. Client to API gateway: Since we do CRUD operations, we will use REST style.
 2. API gateway to other internal services: We use REST because our operation is limited to CRUD.
@@ -58,63 +60,7 @@ type comment
 }
 ```
 
-### Create Comment:
-Request
-```http request
-POST /v1.0/comments/ HTTP/1.1
-HOST: api.comment.com
-X-API-Key: "API Key"
-Authorization: Bearer <JWT>
-Content-Length: xyz
-Content-Type: application/json
-// other headers
-{
-   commentText
-   userID, 
-   postID, 
-   replyingTo,
-   timestamp
-}
-```
-Response
-```http request
-HTTP/1.1 201 Created
-Content-Length: xyz
-Content-Type: application/json
-{
- body
-}
-```
-
-### Update Comment:
-Request
-```http request
-PUT /v1.0/comments/commentID HTTP/1.1
-HOST: api.comment.com
-X-API-Key: "API Key"
-Authorization: Bearer <JWT>
-Content-Length: xyz
-Content-Type: application/json
-// other headers
-{
-   commentText
-   userID, 
-   postID, 
-   replyingTo,
-   etc
-}
-```
-Response same as created but with status code 200 OK.
-
-### GET Comment:
-Request: Where parametersList can be: maxResults, PageToken, PostID, etc
-```http request
-GET /v1.0/comments/{parametersList} HTTP/1.1
-HOST: api.comment.com
-X-API-Key: "API Key"
-Accept: application/json
-// other headers
-```
+![APIEndpoints Image](endpoints.png)
 
 ### Few considerations:
 1. We send the comment request from the client asynchronously so that the client is not stuck since the processing happens via queue.
