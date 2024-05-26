@@ -154,3 +154,57 @@ detects failures, and manages the state of the circuit breaker (Closed, Open, an
 1. Netflix Hystrix: A popular library that implements the Circuit Breaker pattern. It provides annotations and configuration options to easily integrate circuit breakers into microservices
 
 
+# Bulkhead Pattern
+The Bulkhead Pattern is a design principle used in software architecture to enhance system resilience and fault tolerance by isolating components or 
+resources within a system. This pattern is named after the watertight compartments ("bulkheads") on ships, which prevent flooding in one area from 
+affecting the entire vessel. In software systems, the Bulkhead Pattern involves partitioning components or resources into separate "bulkheads" to 
+limit the impact of failures or overloads in one area on the rest of the system. <br/>
+
+### Key Concepts of the Bulkhead Pattern:
+#### Isolation:
+Isolation is the core concept of the Bulkhead Pattern. By isolating components, the pattern helps contain faults or failures within specific modules,
+preventing them from spreading and affecting other parts of the system. This containment minimizes the impact of failures, reduces downtime, 
+and maintains overall system stability. Docker-Compose is one of the ways to isolate the services and allocate them with required resources.<br/>
+
+#### Fault Tolerance
+The Bulkhead Pattern improves fault tolerance by limiting the blast radius of failures. This means that even if one part of the system fails, 
+the rest of the system can continue to function normally. This is achieved by partitioning system resources, such as threads or connections, 
+into separate pools that can be allocated to specific components. <br/>
+
+#### Performance Optimization
+By isolating resource-intensive tasks or services, the Bulkhead Pattern helps optimize system performance.
+
+#### Security Enhancement
+Isolation enhances security by reducing the attack surface and limiting the propagation of security vulnerabilities or breaches.
+
+#### Scalability
+Bulkheading supports system scalability by allowing compartments to be scaled independently based on workload demands or resource requirements.
+
+### Web Application
+Consider a web application that handles both user-facing HTTP requests and background processing tasks, such as sending emails or processing data. To implement bulkheading, separate thread pools can be used for handling these different types of tasks:
+1. User-Facing Requests: A dedicated thread pool handles incoming HTTP requests from users, processing user interactions, generating responses, and returning results to clients.
+2. Background Processing Tasks: Another dedicated thread pool handles background processing tasks asynchronously, such as sending emails or performing scheduled jobs. <br/>
+In this scenario, if a failure occurs in the background processing thread pool, it remains contained within that thread pool and does not affect the operation of the user-facing request thread pool. <br/>
+
+![Bulkhead Image](bulkhead.png)
+
+
+# Retry Pattern
+The Retry pattern involves retrying an operation that has failed due to transient faults. Transient faults are temporary issues such as network glitches, service unavailability, or timeouts that are expected to resolve themselves quickly. By retrying the operation, the system can recover from these temporary issues without manual intervention.
+
+### Importance of the Retry Pattern
+1. Resilience: The Retry pattern enhances the resilience of applications by allowing them to recover from transient failures automatically.
+2. User Experience: It improves user experience by reducing the number of visible errors and timeouts.
+3. System Stability: It helps maintain system stability by preventing transient errors from causing cascading failures.
+
+### When to Use the Retry Pattern
+1. The failure is likely to be temporary.
+2. The operation is idempotent, meaning it can be safely retried without causing unintended side effects.
+3. The system can tolerate the delay introduced by retries.
+
+### Retry Policies
+1. Fixed Retry: Retries the operation a fixed number of times with a fixed delay.
+2. Exponential Backoff: Increases the delay between retries exponentially.
+3. Random Retry: Uses a random delay between retries to avoid synchronized retries across multiple clients.
+
+
