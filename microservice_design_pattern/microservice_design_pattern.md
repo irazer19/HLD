@@ -305,15 +305,41 @@ replay past events. <br/>
 2. Scalability
 3. Loose Coupling and Modularity
 4. Fault Tolerance and Resilience: Because of decoupling, failure in one microservice does not affect others.
-
+ 
 ### Challenges:
 1. Increased Complexity
 2. Event Loss and Latency.
 3. Message Broker's reliability, failure can cause havoc.
 
 
+# Command Query Responsibility Segregation (CQRS) pattern
+The Command Query Responsibility Segregation (CQRS) pattern is an architectural design pattern that separates the responsibilities of 
+reading and writing data into distinct models. This separation allows for more optimized and scalable systems, particularly in complex 
+domains with high-performance requirements. <br/>
 
+### Commands and Queries
+1. Commands: These are operations that change the state of the system. Examples include create, update, and delete operations. Commands do not return data; instead, they modify the application's state.
+2. Queries: These are operations that retrieve data without modifying the state. Queries return data and are optimized for read operations.
 
+### Command Side
+The command side handles all write operations. It processes incoming commands, validates them, and updates the state of the system. This side is responsible 
+for maintaining data consistency and integrity. Commands are typically handled by command handlers, which execute the necessary operations and generate events 
+based on the outcome. <br/>
 
+### Query Side
+The query side handles all read operations. It retrieves data from the read database, which is optimized for query performance. The query side can use 
+different data models and storage mechanisms to optimize read performance independently from the write operations. <br/>
 
+### Data Synchronization
+In a CQRS system, the command and query sides often use separate databases. When a command updates the write database, events are triggered to update the 
+read database. This process can introduce eventual consistency, where the read database may not be immediately updated after a write operation. <br/>
 
+### Benefits of CQRS
+1. Scalability: By separating read and write operations, each side can be scaled independently based on its specific requirements.
+2. Performance Optimization: Each side can be optimized for its specific use case.
+3. Different data models and storage mechanisms can be used for the command and query sides.
+
+### Challenges of CQRS
+1. Complexity: Implementing CQRS adds complexity to the system. 
+2. Eventual Consistency
+3. Overhead: Maintaining separate models and databases can increase the operational overhead.
