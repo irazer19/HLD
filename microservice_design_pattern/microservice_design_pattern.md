@@ -208,3 +208,112 @@ The Retry pattern involves retrying an operation that has failed due to transien
 3. Random Retry: Uses a random delay between retries to avoid synchronized retries across multiple clients.
 
 
+# Sidecar Pattern
+The Sidecar pattern involves deploying a secondary container (sidecar) alongside a primary application container. The sidecar container runs in the 
+same execution environment as the primary application and provides supporting functionalities such as logging, monitoring, security, and service discovery. 
+This pattern is named "sidecar" because it resembles a sidecar attached to a motorcycle, extending the capabilities of the primary application without 
+altering its core logic. <br/>
+
+### Benefits:
+1. Modularity and Encapsulation: By separating secondary functionalities into sidecar containers, each microservice can focus solely on its core business logic, promoting cleaner code organization and easier maintenance.
+2. Scalability: Sidecar containers can be scaled independently of the primary application containers, allowing fine-grained control over resource allocation and better resource utilization.
+3. Isolation: The sidecar container runs alongside the main service, ensuring isolation between the core service logic and auxiliary functionalities, minimizing the impact of failures in the sidecar.
+4. Heterogeneous Components: The sidecar pattern allows applications to be composed of heterogeneous components and technologies, providing a homogeneous interface for platform services across languages.
+
+### Challenges:
+1. Increased Complexity: Implementing the Sidecar pattern adds an additional layer of complexity to the architecture, requiring proper management and coordination of multiple containers.
+2. Potential Single Point of Failure: There is a risk of a single point of failure if the sidecar container experiences issues, necessitating resilience mechanisms like redundancy and health checks.
+3. Increased Latency: The pattern introduces additional communication overhead between the main service and the sidecar container, which might not be preferred in latency-sensitive applications.
+
+### Use Cases:
+1. Logging and Monitoring: Sidecar containers can capture logs and metrics from the main service, aggregate them, and forward them to centralized systems, simplifying observability.
+2. Service Discovery: Sidecars can act as service proxies, handling service discovery and load-balancing tasks, providing a unified entry point for communication.
+3. Security: Sidecars can manage authentication, authorization, and encryption, offloading these tasks from the core service.
+4. Content Transformation: Sidecars can handle tasks like encoding/decoding data or adapting APIs, ensuring the main service remains agnostic of these concerns.
+
+#### Communication between main service and sidecars:
+The primary method of communication between the main service and the sidecar is inter-container communication. <br/>
+1. Local Networking: Containers running on the same host can communicate over a local network.
+2. Shared Volumes: Containers can share data by writing to and reading from shared volumes. 
+3. Inter-Process Communication (IPC): IPC
+
+
+# SAGA Pattern
+The SAGA pattern is a design pattern used to manage distributed transactions in microservices architectures. It ensures data consistency 
+across multiple services by breaking down a large transaction into a series of smaller, local transactions. Each local transaction updates 
+the database and triggers the next transaction in the sequence. If any transaction fails, compensating transactions are executed to undo the 
+changes made by the previous transactions. <br/>
+
+### Key Features of the SAGA Pattern
+1. Coordinated Transactions: The SAGA pattern coordinates transactions across multiple services or processes. Each step in the saga is a local transaction executed by a single service, and the state changes are broadcasted to other services involved in the saga.
+2. Compensation and Rollback: If a step in the saga fails, compensating transactions are executed to roll back the changes made by previous steps. This ensures that the system remains consistent even in the event of failures.
+3. Distributed Transactions: The pattern supports distributed transactions that span multiple services, providing a way to coordinate these transactions in a consistent manner.
+4. Asynchronous Processing: The SAGA pattern can support asynchronous processing, allowing for greater concurrency and performance, which is crucial in distributed systems.
+5. Error Handling: It provides a standardized way to handle errors that occur during the transaction, ensuring consistent error handling across all services involved.
+6. Scalability: The pattern can scale to handle large and complex transactions by breaking them down into smaller, more manageable steps that can be executed in parallel across different services.
+
+### There are two main approaches to implementing the SAGA pattern: 
+1. Choreography
+2. Orchestration
+
+### Choreography
+In the choreography approach, each microservice involved in the saga publishes events that are processed by the next microservice in the sequence. There is no central coordinator; instead, each service knows the next step in the process and triggers it upon completion of its own task. <br/>
+Example: In an e-commerce application, the order processing might involve the following steps:
+1. Begin Order: Create a new order in the database.
+2. Process Payment: Charge the user's credit card. If successful, mark the order as paid; if not, cancel the order.
+3. Check Inventory: Verify if the items are in stock. If not, cancel the order.
+4. Reserve Inventory: Reserve the items. If unsuccessful, cancel the order.
+5. Ship Order: Mark the order as shipped.
+Each step is implemented as a separate service, and upon successful completion, it sends a message to the next step. If a step fails, it sends a message to roll back the previous steps.
+
+#### Orchestration
+In the orchestration approach, a central orchestrator manages the overall transaction status. The orchestrator is responsible for invoking the necessary steps and compensating transactions in case of failures. <br/>
+The orchestrator keeps track of the sequence of events and ensures that compensating transactions are executed in the correct order if any step fails. <br/>
+
+### Use Cases
+1. The application needs to maintain data consistency across multiple microservices without tight coupling.
+2. There are long-lived transactions, and blocking other microservices is not desirable.
+3. The ability to roll back operations in case of failure is required.
+
+![SAGA Image](saga.png)
+
+
+# Event-Driven Architecture Pattern
+Event-Driven Architecture (EDA) is a software design pattern where system components communicate by generating, detecting, and responding to events. 
+This architecture is particularly useful for systems that require high scalability, flexibility, and real-time responsiveness. <br/>
+
+### Key Patterns in Event-Driven Architecture:
+
+#### Publisher/Subscriber Pattern
+In the Publisher/Subscriber (Pub/Sub) pattern, publishers send events to a central event broker, which then distributes these events to subscribers. 
+This decouples the event producers from the event consumers, allowing them to operate independently. <br/>
+##### Components:
+1. Publisher: Generates and sends events.
+2. Subscriber: Receives and processes events.
+3. Event Broker: Mediates the communication between publishers and subscribers.
+
+#### Event Streaming Pattern
+In the Event Streaming pattern, events are recorded in a log that subscribers can read from. This allows subscribers to capture events in real-time and also 
+replay past events. <br/>
+#### Components:
+1. Event Stream: A log where events are recorded.
+2. Publisher: Writes events to the stream.
+3. Subscriber: Reads events from the stream.
+
+### Benefits of Event-Driven Architecture
+1. Real-Time Responsiveness
+2. Scalability
+3. Loose Coupling and Modularity
+4. Fault Tolerance and Resilience: Because of decoupling, failure in one microservice does not affect others.
+
+### Challenges:
+1. Increased Complexity
+2. Event Loss and Latency.
+3. Message Broker's reliability, failure can cause havoc.
+
+
+
+
+
+
+
