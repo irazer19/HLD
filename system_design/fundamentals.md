@@ -1,4 +1,4 @@
-### Back of the Envelope Estimation:
+# Back of the Envelope Estimation:
 | Power of 2 | Number of Zeros     | Data |
 |------------|---------------------|------|
 | 10         | 10^3 - Thousand     | 1 KB |
