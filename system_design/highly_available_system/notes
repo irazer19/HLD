@@ -1,0 +1,20 @@
+The problem with a single node architecture is that its a single point of failure.
+So we have to use multi-node architecture:
+There are two types:
+1. Active-Passive
+2. Active-Active
+
+
+# Active-Passive:
+Lets say we have an architecture which is replicated in two different data centers d1 and d2.
+Where d1 is primary/active and d2 is passive. All the requests coming to d1 will be handled by the database of d1, and
+if any request goes to d2, then it will be routed to the primary d1 database.
+Now if d1 goes down, then d2 will become the primary/active database and handle all the requests.
+There are few disadvantages of this:
+- If d1 fails, then all requests coming to d1 will need to be routed to d2 which has high latency
+- It takes some time to set the passive database as primary after the failure, during this time all the write requests
+will fail.
+
+# Active-Active:
+Everything remains same except that both the databases of the datacenters d1 and d2 are active and can serve requests.
+The complexity here is the syncup of the data between the two databases of d1 and d2. Also the sync is bidirectional.

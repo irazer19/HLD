@@ -1,0 +1,36 @@
+Idempotency:
+Ensure that the same operation can be performed multiple times without changing the result beyond the initial application.
+
+By default, GET, PUT and DELETE requests are idempotent in nature.
+But POST request is not idempotent.
+
+Different ways duplicate requests came come:
+1. Sequentially performing the same request.
+2. Parallely sending the same request.
+
+Idempotency Key: Provide a way for clients to specify an idempotency key with each POST request. This key is a unique
+identifier (such as a UUID) that the client generates and includes in the request, often in a custom HTTP header like Idempotency-Key
+
+Agreement with client:
+1. Client should generate the idempotency key
+2. For each different operation, a new idempotency key should be generated.
+
+Client Steps:
+1. Client generates the idempotency key
+2. Client adds this key in the custom header.
+3. Client makes a POST request.
+
+Server steps:
+1. Server recieved the idempotency key in the header
+2. Server will validate whether the key is present in the header, if not then HTTP 400 else server will try to read the
+   key from the database, if key is not present in db then the server will put an entry into the db else if the key
+   is present in the db then if the operation was successful then it will claim the idempotency key
+3. Now if the client retries the request with the same idempotency key then the server will first read this key from
+   the db, and if it exists then the server will terminate the request without creating new resource.
+
+What about parallel requests? How can it be handled?
+- We will apply a lock to the critical section which is the step where the server reads the key from the database till
+  the resource creation.
+
+Followup: What if the two parallel requests goes into two different clusters where each cluster has its own db?
+- Since the sync between db's is slow, we will use a cache which is much faster into sync.
